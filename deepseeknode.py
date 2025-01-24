@@ -1,6 +1,5 @@
-import os
-import string
 from openai import OpenAI
+from PIL import Image
 
 
 class DeepSeekChatNode:
@@ -11,12 +10,14 @@ class DeepSeekChatNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "image": ("IMAGE", {}),
-                "api_key": ("STRING", {}),
+                "api_key": ("STRING",),
                 "max_tokens": ("INT", {"default": "4096", "min": 1, "max": 8192}),
-                "temperature": ("INT", {"default": "1", "min": 0, "max": 2}),
+                "temperature": ("FLOAT", {"default": "1", "min": 0, "max": 2}),
                 "prompt": ("STRING", {"multiline": True, "placeholder": "Type your prompt here"}),
-            }
+            },
+            "optional": {
+                "image": ("IMAGE",),
+            },
         }
 
     RETURN_TYPES = ("STRING", "STRING")
@@ -24,28 +25,47 @@ class DeepSeekChatNode:
     CATEGORY = "Fair/deepseek"
 
     FUNCTION = "node_function"
-    OUTPUT_NODE = True
 
-    def node_function(self, image, api_key, max_tokens, temperature, prompt):
-        client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+    def node_function(self, api_key, max_tokens, temperature, prompt, image=None):
+        if image is not None:
+            pil_image = Image.fromarray(image.mul(255).byte().cpu().numpy())
+            client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+            response = client.chat.completions.create(
+                model="deepseek-chat",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant"},
+                    {"role": "user", "content": prompt},
+                ],
+                stream=False,
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
 
-        response = client.chat.completions.create(
-            model="deepseek-chat",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant"},
-                {"role": "user", "content": prompt},
-            ],
-            stream=False,
-            max_tokens=max_tokens,
-            temperature=temperature,
-        )
+            content = response.choices[0].message.content
+            total_tokens = response.usage.total_tokens
+            return (
+                content,
+                total_tokens,
+            )
+        else:
+            client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+            response = client.chat.completions.create(
+                model="deepseek-chat",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant"},
+                    {"role": "user", "content": prompt},
+                ],
+                stream=False,
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
 
-        content = response.choices[0].message.content
-        total_tokens = response.usage.total_tokens
-        return (
-            content,
-            total_tokens,
-        )
+            content = response.choices[0].message.content
+            total_tokens = response.usage.total_tokens
+            return (
+                content,
+                total_tokens,
+            )
 
 
 class DeepSeekReasonerNode:
@@ -56,11 +76,13 @@ class DeepSeekReasonerNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "image": ("IMAGE", {}),
-                "api_key": ("STRING", {}),
+                "api_key": ("STRING",),
                 "max_tokens": ("INT", {"default": "4096", "min": 1, "max": 8192}),
                 "prompt": ("STRING", {"multiline": True, "placeholder": "Type your prompt here"}),
-            }
+            },
+            "optional": {
+                "image": ("IMAGE",),
+            },
         }
 
     RETURN_TYPES = ("STRING", "STRING", "STRING")
@@ -68,11 +90,9 @@ class DeepSeekReasonerNode:
     CATEGORY = "Fair/deepseek"
 
     FUNCTION = "node_function"
-    OUTPUT_NODE = True
 
-    def node_function(self, image, api_key, max_tokens, temperature, prompt):
+    def node_function(self, api_key, max_tokens, prompt, image=None):
         client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
-
         response = client.chat.completions.create(
             model="deepseek-reasoner",
             messages=[
@@ -83,7 +103,7 @@ class DeepSeekReasonerNode:
             max_tokens=max_tokens,
         )
 
-        reasoning_content = response.choices[0].reasoning_content
+        reasoning_content = response.choices[0].message.reasoning_content
         content = response.choices[0].message.content
         total_tokens = response.usage.total_tokens
         return (
