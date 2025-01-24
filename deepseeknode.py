@@ -3,7 +3,7 @@ import string
 from openai import OpenAI
 
 
-class DeepSeekNode:
+class DeepSeekChatNode:
     def __init__(self):
         pass
 
@@ -11,8 +11,10 @@ class DeepSeekNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
+                "image": ("IMAGE", {}),
                 "api_key": ("STRING", {}),
-                "model": (["deepseek-chat", "deepseek-reasoner"], {"default": "deepseek-chat"}),
+                "max_tokens": ("INT", {"default": "4096", "min": 1, "max": 8192}),
+                "temperature": ("INT", {"default": "1", "min": 0, "max": 2}),
                 "prompt": ("STRING", {"multiline": True, "placeholder": "Type your prompt here"}),
             }
         }
@@ -27,16 +29,18 @@ class DeepSeekNode:
     FUNCTION = "node_function"
     OUTPUT_NODE = True
 
-    def node_function(self, api_key, model, prompt):
+    def node_function(self, image, api_key, max_tokens, temperature, prompt):
         client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
         response = client.chat.completions.create(
-            model=model,
+            model="deepseek-chat",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant"},
                 {"role": "user", "content": prompt},
             ],
             stream=False,
+            max_tokens=max_tokens,
+            temperature=temperature,
         )
 
         print(response)
