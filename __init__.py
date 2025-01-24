@@ -1,11 +1,14 @@
 from .deepseeknode import DeepSeekChatNode
+from .deepseeknode import DeepSeekReasonerNode
 
 NODE_CLASS_MAPPINGS = {
     "DeepSeekChatNode": DeepSeekChatNode,
+    "DeepSeekReasonerNode": DeepSeekReasonerNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "DeepSeekChatNode": "DeepSeek Chat",
+    "DeepSeekReasonerNode": "DeepSeek Reasoner",
 }
 
 
