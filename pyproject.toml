@@ -1,0 +1,13 @@
+[project]
+name = "comfyui-deepseek"
+description = ""
+version = "1.0.0"
+license = { file = "LICENSE" }
+dependencies = ["openai"]
+
+[project.urls]
+Repository = "https://github.com/yanhuifair/comfyui-deepseek"
+[tool.comfy]
+PublisherId = "fffffair"
+DisplayName = "comfyui-deepseek"
+Icon = ""
