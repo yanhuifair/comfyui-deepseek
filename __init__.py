@@ -5,7 +5,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "DeepSeekNode": "Deep Seek",
+    "DeepSeekNode": "DeepSeek",
 }
 
 
