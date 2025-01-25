@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-deepseek"
 description = "nodes for deepseek api" 
-version = "1.0.7"
+version = "1.0.8"
 license = { file = "LICENSE" }
 dependencies = ["openai"]
 
