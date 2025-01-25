@@ -1,4 +1,10 @@
-Implement deepseek API call
+Implement deepseek API call 
 https://api-docs.deepseek.com/
 
-<img width="518" alt="Snipaste_2025-01-24_15-33-07" src="https://github.com/user-attachments/assets/33757fa7-9e25-4089-8856-5b83ff6f43f2" />
+
+![Snipaste_2025-01-25_14-00-14](https://github.com/user-attachments/assets/0b4d121f-3d83-454b-8cc4-0cc914bc334c)
+
+
+You need to create a new txt file in the plugin directory and write your api key into the txt file
+
+![Snipaste_2025-01-25_14-04-58](https://github.com/user-attachments/assets/943f1b8b-cf3d-4263-98cd-4180972e8c68)
