@@ -1,5 +1,6 @@
 # comfyui-deepseek
-Implement deepseek API call 
+A comfyui plugin for deepseek api
+
 https://api-docs.deepseek.com/
 
 ## Nodes
