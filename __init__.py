@@ -1,6 +1,6 @@
-from .deepseeknode import DeepSeekChatNode
-from .deepseeknode import DeepSeekChatProNode
-from .deepseeknode import DeepSeekReasonerNode
+from .deepseeknodes import DeepSeekChatNode
+from .deepseeknodes import DeepSeekChatProNode
+from .deepseeknodes import DeepSeekReasonerNode
 
 NODE_CLASS_MAPPINGS = {
     "DeepSeekChatNode": DeepSeekChatNode,
